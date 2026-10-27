@@ -8,7 +8,7 @@ RUN apt-get update \
     && docker-php-ext-install intl pdo_mysql zip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN echo "opcache.validate_timestamps=0" > /usr/local/etc/php/conf.d/zz-opcache.ini
+RUN echo "opcache.validate_timestamps=0" > /usr/local/etc/php/conf.d/zz-opcache.ini #создаёт файл opcache c настройкой времени валидации файлов = 0, что даёт скорость загрузке страницы
 
 RUN a2enmod rewrite \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf
