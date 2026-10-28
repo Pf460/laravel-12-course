@@ -277,12 +277,12 @@
         </div>
 
         <nav class="sidebar__nav">
-            <a href="{{ route('posts.index') }}"
+            <a href="{{ route('admin.posts.index') }}"
                class="sidebar__link {{ request()->routeIs('posts.index', 'posts.show', 'posts.edit') ? 'is-active' : '' }}">
                 Посты
             </a>
-            <a href="{{ route('posts.create') }}"
-               class="sidebar__link {{ request()->routeIs('posts.create') ? 'is-active' : '' }}">
+            <a href="{{ route('admin.posts.create') }}"
+               class="sidebar__link {{ request()->routeIs('admin.posts.create') ? 'is-active' : '' }}">
                 Добавить пост
             </a>
         </nav>

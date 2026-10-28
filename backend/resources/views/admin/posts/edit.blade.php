@@ -8,9 +8,28 @@
     </div>
 
     <div class="panel" style="max-width: 780px;">
-        <form action="{{ route('admin.posts.update', $post->id) }}" method="POST" class="form">
+        <form action="{{ route('admin.posts.update', $post->id) }}" method="POST" class="form" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+
+            <div class="form__group">
+                <label for="image" class="form__label">Изображение</label>
+                <input type="file" name="image" accept="image/*" class="form__input">
+                @error('image') <p class="alert--error"> {{ $message }} </p> @enderror
+            </div>
+
+            @if (isset($post) && $post->image)
+                <div class="form__group" style="margin-top: 20px;">
+                    <p class="muted" style="margin-bottom: 8px;">Текущее изображение</p>
+                    <img src="{{ $post->image_url }}" alt=""
+                         style="height: 128px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border);" />
+
+                    <label class="form__check" style="margin-top: 12px; cursor: pointer;">
+                        <input type="checkbox" name="remove_image" value="1">
+                        <span>Удалить изображение</span>
+                    </label>
+                </div>
+            @endif
 
             <div class="form__group">
                 <label for="title" class="form__label">Заголовок</label>

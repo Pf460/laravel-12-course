@@ -8,8 +8,14 @@
     </div>
 
     <div class="panel" style="max-width: 780px;">
-        <form action="{{ route('admin.posts.store') }}" method="POST" class="form">
+        <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data" class="form">
             @csrf
+
+            <div class="form__group">
+                <label for="image" class="form__label">Изображение</label>
+                <input type="file" name="image" accept="image/*" class="form__input">
+                @error('image') <p class="alert--error"> {{ $message }} </p> @enderror
+            </div>
 
             <div class="form__group">
                 <label for="title" class="form__label">Заголовок</label>

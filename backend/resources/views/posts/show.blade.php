@@ -18,6 +18,10 @@
                 Опубликовано: {{ ($post->published_at ?? $post->created_at)?->format('d.m.Y') }}
             </p>
 
+            @if ($post->image)
+                <img src="{{ $post->image_url }}" alt="{{ $post->title }}">
+            @endif
+
             <h1 class="panel__title" style="margin-bottom: 24px; font-size: 32px;">
                 {{ $post->title }}
             </h1>
