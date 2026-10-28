@@ -1,4 +1,3 @@
-{{-- OpenCode commit: простая админка без внешних шаблонов и CSS-фреймворков. --}}
 <!doctype html>
 <html lang="ru">
 <head>

@@ -3,7 +3,7 @@
 @section('title', 'Посты')
 
 @section('content')
-    <form action="{{ route('posts.index') }}" method="GET"
+    <form action="{{ route('admin.posts.index') }}" method="GET"
           style="display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
         <div style="flex: 1 1 220px;">
             <label for="search" class="form__label">Поиск</label>
@@ -34,7 +34,7 @@
 
         <div style="display: flex; gap: 8px;">
             <button type="submit" class="btn btn--primary">Применить</button>
-            <a href="{{ route('posts.index') }}" class="btn btn--secondary">Сбросить</a>
+            <a href="{{ route('admin.posts.index') }}" class="btn btn--secondary">Сбросить</a>
         </div>
     </form>
 
@@ -45,13 +45,13 @@
                 · страница {{ $posts->currentPage() }} из {{ $posts->lastPage() }}
             @endif
         </p>
-        <a href="{{ route('posts.create') }}" class="btn btn--primary">Новый пост</a>
+        <a href="{{ route('admin.posts.create') }}" class="btn btn--primary">Новый пост</a>
     </div>
 
     @if ($posts->isEmpty())
         <div class="table-wrap">
             <div class="empty">
-                Постов пока нет. <a href="{{ route('posts.create') }}">Создайте первый</a>.
+                Постов пока нет. <a href="{{ route('admin.posts.create') }}">Создайте первый</a>.
             </div>
         </div>
     @else
@@ -90,9 +90,9 @@
                             <td>{{ $post->created_at?->format('d.m.Y') }}</td>
                             <td>
                                 <div class="table-actions">
-                                    <a href="{{ route('posts.show', $post->id) }}" class="btn btn--secondary btn--sm">Открыть</a>
-                                    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn--secondary btn--sm">Изменить</a>
-                                    <form action="{{ route('posts.destroy', $post) }}" method="POST"
+                                    <a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn--secondary btn--sm">Открыть</a>
+                                    <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn--secondary btn--sm">Изменить</a>
+                                    <form action="{{ route('admin.posts.destroy', $post) }}" method="POST"
                                           onsubmit="return confirm('Удалить этот пост?')">
                                         @csrf
                                         @method('DELETE')

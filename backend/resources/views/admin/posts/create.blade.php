@@ -8,7 +8,7 @@
     </div>
 
     <div class="panel" style="max-width: 780px;">
-        <form action="{{ route('posts.store') }}" method="POST" class="form">
+        <form action="{{ route('admin.posts.store') }}" method="POST" class="form">
             @csrf
 
             <div class="form__group">
@@ -39,7 +39,7 @@
             </div>
 
             <div class="form__actions">
-                <a href="{{ route('posts.index') }}" class="btn btn--secondary">Отмена</a>
+                <a href="{{ route('admin.posts.index') }}" class="btn btn--secondary">Отмена</a>
                 <button type="submit" class="btn btn--primary">Создать</button>
             </div>
         </form>

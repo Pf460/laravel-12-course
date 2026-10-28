@@ -8,7 +8,7 @@
     </div>
 
     <div class="panel" style="max-width: 780px;">
-        <form action="{{ route('posts.update', $post->id) }}" method="POST" class="form">
+        <form action="{{ route('admin.posts.update', $post->id) }}" method="POST" class="form">
             @csrf
             @method('PUT')
 
@@ -40,7 +40,7 @@
             </div>
 
             <div class="form__actions">
-                <a href="{{ route('posts.index') }}" class="btn btn--secondary">Отмена</a>
+                <a href="{{ route('admin.posts.index') }}" class="btn btn--secondary">Отмена</a>
                 <button type="submit" class="btn btn--primary">Обновить</button>
             </div>
         </form>
