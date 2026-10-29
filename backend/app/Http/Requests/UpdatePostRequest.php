@@ -26,7 +26,7 @@ class UpdatePostRequest extends FormRequest
             'title' => 'required|min:3',
             'excerpt' => 'required|min:10',
             'body' => 'required|min:10',
-            'is_published' => 'nullable',
+            'is_published' => 'boolean|sometimes',
             'published_at' => 'nullable',
             'user_id' => 'nullable',
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
@@ -42,5 +42,13 @@ class UpdatePostRequest extends FormRequest
             'body.required' => 'Пожалуйста введите текст поста.',
             'image.image' => 'Файл должен быть изображением.'
         ];
+    }
+
+    public function prepareFotValidation() : void
+    {
+        $this->merge([
+            'is_published' => $this->boolean('is_published'),
+            'remove_image' => $this->boolean('remove_image')
+        ]);
     }
 }

@@ -27,7 +27,7 @@ class StorePostRequest extends FormRequest
             'slug' => 'nullable',
             'excerpt' => 'required|min:10',
             'body' => 'required|min:10',
-            'is_published' => 'nullable',
+            'is_published' => 'boolean|sometimes',
             'published_at' => 'nullable',
             'user_id' => 'nullable',
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048']
@@ -42,5 +42,12 @@ class StorePostRequest extends FormRequest
             'body.required' => 'Пожалуйста введите текст поста.',
             'image.image' => 'Файл должен быть изображением.'
         ];
+    }
+
+    protected function prepareFotValidation() : void
+    {
+        $this->merge([
+           'is_published' => $this->boolean('is_published')
+        ]);
     }
 }

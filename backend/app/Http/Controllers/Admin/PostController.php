@@ -14,12 +14,17 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
+
+    public function __construct(
+        private PostService $service,
+        private PostRepositoryInterface $repository
+    ){}
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $posts = Post::latest()->paginate(5);
+        $posts = $this->repository->getPaginated(5);
 
         return view('admin.posts.index', compact('posts'));
     }
@@ -37,20 +42,7 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('posts', 'public');
-        }
-
-        $slugBase = Str::slug($data['title']);
-        $slug = $slugBase . '-' . rand(1, 999999);
-        $data['slug'] = $slug;
-
-        $data['is_published'] = $request->has('is_published');
-        $data['published_at'] = $request->has('is_published') ? now() : null;
-
-        Post::create($data);
+        $this->service->create($request->validated());
 
         return redirect()->route('admin.posts.index')->with('success', 'Пост успешно создан.');
     }
@@ -77,28 +69,7 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post): RedirectResponse
     {
         //validate - отвечает за валидацию(правильность) данных
-        $data = $request->validated();
-
-        if ($request->boolean('remove_image') && $post->image)
-        {
-            Storage::disk('public')->delete($post->image);
-            $data['image'] = null;
-        }
-
-        if ($request->hasFile('image'))
-        {
-            if ($post->image)
-            {
-                Storage::disk('public')->delete($post->image);
-            }
-            $data['image'] = $request->file('image')->store('posts', 'public');
-        }
-
-        $data['is_published'] = $request->has('is_published');
-        $data['published_at'] = $request->has('is_published') ? now() : null;
-
-        $post->update($data);
-
+        $this->service->update($post, $request->validated());
         return redirect()->route('admin.posts.index')->with('success', 'Пост успешно обновлён.');
     }
 
@@ -107,7 +78,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post): RedirectResponse
     {
-        $post->delete();
+        $this->service->delete($post);
 
         return redirect()->route('admin.posts.index')->with('success', 'Пост успешно удалён.');
     }
