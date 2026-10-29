@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,18 +35,9 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StorePostRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'title' => 'required|min:3',
-            'slug' => 'nullable',
-            'excerpt' => 'required|min:10',
-            'body' => 'required|min:10',
-            'is_published' => 'nullable',
-            'published_at' => 'nullable',
-            'user_id' => 'nullable',
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048']
-        ]);
+        $data = $request->validated();
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('posts', 'public');
@@ -81,18 +74,10 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post): RedirectResponse
+    public function update(UpdatePostRequest $request, Post $post): RedirectResponse
     {
-        $data = $request->validate([ //validate - отвечает за валидацию(правильность) данных
-            'title' => 'required|min:3',
-            'excerpt' => 'required|min:10',
-            'body' => 'required|min:10',
-            'is_published' => 'nullable',
-            'published_at' => 'nullable',
-            'user_id' => 'nullable',
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'remove_image' => ['sometimes', 'boolean']
-        ]);
+        //validate - отвечает за валидацию(правильность) данных
+        $data = $request->validated();
 
         if ($request->boolean('remove_image') && $post->image)
         {

@@ -34,21 +34,21 @@
             <div class="form__group">
                 <label for="title" class="form__label">Заголовок</label>
                 <input type="text" name="title" id="title" class="form__input"
-                       value="{{ old('title', $post->title) }}" placeholder="Название поста" required autofocus>
+                       value="{{ old('title', $post->title) }}" placeholder="Название поста"  autofocus>
                 @error('title') <p class="alert--error"> {{ $message }} </p> @enderror
             </div>
 
             <div class="form__group">
                 <label for="excerpt" class="form__label">Краткое описание</label>
                 <textarea name="excerpt" id="excerpt" class="form__textarea" rows="3"
-                          placeholder="Тизер для списка постов..." required>{{ old('excerpt', $post->excerpt) }}</textarea>
+                          placeholder="Тизер для списка постов..." >{{ old('excerpt', $post->excerpt) }}</textarea>
                 @error('excerpt') <p class="alert--error"> {{ $message }} </p> @enderror
             </div>
 
             <div class="form__group">
                 <label for="body" class="form__label">Текст</label>
                 <textarea name="body" id="body" class="form__textarea" rows="10"
-                          placeholder="Основной контент..." required>{{ old('body', $post->body) }}</textarea>
+                          placeholder="Основной контент..." >{{ old('body', $post->body) }}</textarea>
                 @error('body') <p class="alert--error"> {{ $message }} </p> @enderror
 
             </div>
