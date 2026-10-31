@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController as PublicPostController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('blog.index')) -> name('index');
 
-Route::prefix('admin')->as('admin.')->group(function () {
+Route::prefix('admin')->as('admin.')->middleware('auth')->group(function () {
     Route::resource('posts', AdminPostController::class);
 });
 
@@ -17,3 +18,13 @@ Route::prefix('blog')->as('blog.')->group(function () {
 
     Route::get('/{post:slug}', [PublicPostController::class, 'show'])->name('show');
 });
+
+Route::middleware('guest')->group(function () {
+   Route::get('/login', [AuthController::class, 'loginShow'])->name('login');
+   Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+   Route::get('/signup', [AuthController::class, 'signupShow'])->name('signup');
+   Route::post('/signup', [AuthController::class, 'signup'])->name('signup.post');
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');

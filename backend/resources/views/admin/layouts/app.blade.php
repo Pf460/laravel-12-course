@@ -275,7 +275,6 @@
             Блог
             <span>Админка</span>
         </div>
-
         <nav class="sidebar__nav">
             <a href="{{ route('admin.posts.index') }}"
                class="sidebar__link {{ request()->routeIs('posts.index', 'posts.show', 'posts.edit') ? 'is-active' : '' }}">
@@ -285,6 +284,12 @@
                class="sidebar__link {{ request()->routeIs('admin.posts.create') ? 'is-active' : '' }}">
                 Добавить пост
             </a>
+            <form method="POST" action="{{ route('logout') }}" style="margin-top: auto; padding: 0 22px;">
+                @csrf
+                <button type="submit" class="sidebar__link" style="width: 100%; text-align: left; background: none; border: none; cursor: pointer; display: block; padding: 10px 0;">
+                    Выйти
+                </button>
+            </form>
         </nav>
     </aside>
 
