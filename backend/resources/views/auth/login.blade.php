@@ -7,7 +7,7 @@
         <h1 class="page-title" style="text-align: center; font-size: 28px;">Вход в систему</h1>
 
         <div class="panel">
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('login.post') }}">
                 @csrf
 
                 <div style="margin-bottom: 20px;">
@@ -36,6 +36,12 @@
                 <button type="submit" class="btn btn--primary" style="width: 100%;">
                     Войти
                 </button>
+
+                <div style="text-align: center; margin-top: 20px; font-size: 14px;">
+                    <a href="{{ route('password.request') }}" style="color: var(--primary);">
+                        Забыли пароль?
+                    </a>
+                </div>
             </form>
         </div>
     </div>
