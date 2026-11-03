@@ -127,8 +127,16 @@
         <div class="topbar__inner">
             <a href="/" class="topbar__logo">Мой блог</a>
             <nav class="topbar__nav">
-                <a href="/">Blog</a>
-                <a href="#">Index</a>
+                <a href="{{ route('login') }}">Войти</a>
+                <a href="{{ route('index') }}">Блог</a>
+                @auth {{-- Проверка пользователя на авторизацию --}}
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" style="background: none; border: none; color: var(--muted); cursor: pointer; font: inherit; font-size: 14px; font-weight: 500; padding: 0;">
+                            Выйти
+                        </button>
+                    </form>
+                @endauth
             </nav>
         </div>
     </header>

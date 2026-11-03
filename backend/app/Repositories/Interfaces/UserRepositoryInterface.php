@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Interfaces;
 
+use App\Enums\UserRole;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface UserRepositoryInterface
 {
@@ -10,5 +12,8 @@ interface UserRepositoryInterface
 
     public function findByEmail(string $email): ?User;
 
+    public function updateRole(int $id, UserRole $role): bool;
+
+    public function getPaginated (int $perPage): LengthAwarePaginator;
 
 }

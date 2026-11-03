@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\PostController as PublicPostController;
@@ -11,8 +12,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('blog.index')) -> name('index');
 
-Route::prefix('admin')->as('admin.')->middleware('auth')->group(function () {
+Route::prefix('admin')->as('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('posts', AdminPostController::class);
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::patch('users/{userId}/role', [UserController::class, 'updateRole'])->name('users.update.role');
 });
 
 Route::prefix('blog')->as('blog.')->group(function () {

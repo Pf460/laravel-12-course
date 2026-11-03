@@ -42,6 +42,11 @@
                         Забыли пароль?
                     </a>
                 </div>
+                <div style="text-align: center; margin-top: 20px; font-size: 14px;">
+                    <a href="{{ route('signup') }}" style="color: var(--primary);">
+                        Нет аккаунта? Зарегистрируйтесь
+                    </a>
+                </div>
             </form>
         </div>
     </div>

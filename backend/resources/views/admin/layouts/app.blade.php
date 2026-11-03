@@ -280,6 +280,7 @@
                class="sidebar__link {{ request()->routeIs('posts.index', 'posts.show', 'posts.edit') ? 'is-active' : '' }}">
                 Посты
             </a>
+            <a href="{{ route('admin.users.index') }}" class="sidebar__link">Пользователи</a>
             <a href="{{ route('admin.posts.create') }}"
                class="sidebar__link {{ request()->routeIs('admin.posts.create') ? 'is-active' : '' }}">
                 Добавить пост

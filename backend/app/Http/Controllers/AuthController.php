@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('blog.index');
     }
 
     public function login(LoginRequest $request) : RedirectResponse
@@ -44,13 +44,13 @@ class AuthController extends Controller
         }
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.posts.index'))->with('status', 'С возвращением');
+        return redirect()->intended(route('blog.index'))->with('status', 'С возвращением');
     }
 
     public function logout() : RedirectResponse
     {
         $this->auth->logout();
 
-        return redirect()->route('login')->with('status', 'Вы вышли из аккаунта');
+        return redirect()->route('blog.index')->with('status', 'Вы вышли из аккаунта');
     }
 }

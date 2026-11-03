@@ -106,8 +106,8 @@
             </table>
         </div>
 
-        <div class="admin-pagination">
-            {{ $posts->withQueryString()->links('pagination::simple-tailwind') }}
-        </div>
+        @if ($posts->hasPages())
+            {{ $posts->onEachSide(1) -> links('pagination.custom') }}
+        @endif
     @endif
 @endsection
