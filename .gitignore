@@ -19,9 +19,3 @@ yarn-error.log
 
 # IDE / OS
 /.idea
-/.vscode
-/.fleet
-/.nova
-/.zed
-.DS_Store
-Thumbs.db
