@@ -120,6 +120,18 @@
         }
         .btn--primary { background: var(--primary); color: #fff; }
         .btn--primary:hover { background: var(--primary-dark); text-decoration: none; }
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .alert--success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
     </style>
 </head>
 <body>

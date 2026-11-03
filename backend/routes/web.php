@@ -39,3 +39,27 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('email/verify/', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    Route::get('email/verify/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
+        $request->fulfill();
+
+        return redirect('/');
+    })->name('verification.verify');
+
+    Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('message', 'Ссылка для подтверждения отправлена');
+    })->name('verification.send');
+
+    Route::middleware('verified')->group(function () {
+       Route::get('admin/', function() {
+           return 'Админка';
+       });
+    });
+});

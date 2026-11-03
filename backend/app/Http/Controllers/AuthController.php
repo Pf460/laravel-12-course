@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('blog.index');
+        return redirect()->route('verification.notice');
     }
 
     public function login(LoginRequest $request) : RedirectResponse
