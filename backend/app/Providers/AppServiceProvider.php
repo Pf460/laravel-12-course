@@ -7,7 +7,7 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\PostRepository;
 use App\Repositories\UserRepository;
 use App\Service\AuthService;
-use App\Service\interfaces\AuthServiceInterface;
+use App\Service\Interfaces\AuthServiceInterface;
 use App\Service\Interfaces\UserServiceInterface;
 use App\Service\UserService;
 use Illuminate\Pagination\Paginator;
