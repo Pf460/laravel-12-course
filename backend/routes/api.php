@@ -15,6 +15,10 @@ Route::prefix('auth')->group(function (): void {
    });
 });
 
-Route::get('posts', [PostController::class, 'index']);
+Route::apiResource('posts', PostController::class)->only(['index', 'show']); //только
 Route::get('posts/{id}', [PostController::class, 'show']);
+
+Route::middleware('auth:sanctum')->group(function (): void {
+    Route::apiResource('posts', PostController::class)->except('index', 'show'); //исключение
+});
 
