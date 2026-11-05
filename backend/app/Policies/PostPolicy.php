@@ -8,6 +8,14 @@ use Illuminate\Auth\Access\Response;
 
 class PostPolicy
 {
+    public function before(User $user): ?bool
+    {
+        if ($user->role?->value === 'admin') {
+            return true;
+        }
+
+        return null;
+    }
     public function update(User $user, Post $post): bool
     {
         return $user->id === $post->user_id;

@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\ApiException;
+use App\Exceptions\PostNotFoundException;
 use App\Http\Middleware\RequestIdMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -51,11 +52,18 @@ return Application::configure(basePath: dirname(__DIR__))
            return true;
         });
 
-        $exceptions->report(function(ThrottleRequestsException $e): JsonResponse {
+        $exceptions->render(function(ThrottleRequestsException $e): JsonResponse {
             return response()->json([
                 'success' => false,
                 'message' => 'Too many requests, please try again later.'
             ], 429);
+        });
+
+        $exceptions->render(function (PostNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 404);
         });
 
         $exceptions->render(function (ApiException $e) {
@@ -69,7 +77,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => 'Resource not found',
-            ]);
+            ], 404);
         });
         $exceptions->render(function (AuthorizationException $e){
            return response()->json([

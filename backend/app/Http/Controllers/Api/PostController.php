@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\CreatePostAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
@@ -17,6 +18,7 @@ class PostController extends Controller
 {
     public function __construct(
         private PostServiceInterface $postService,
+        private CreatePostAction $action
     ){}
 
     public function index(): PostCollection
@@ -33,53 +35,33 @@ class PostController extends Controller
         return new PostCollection($posts);
     }
 
-    public function show(int $id): PostResource | JsonResponse
+    public function show(Post $post): PostResource | JsonResponse
     {
-         $post = $this->postService->getByIdApi($id);
-
-        if(!$post){
-            return response()->json(["message" => "Пост не найден"], 404);
-        }
-
-        return new PostResource($post);
+        $cachedPost = $this->postService->getByIdApi($post->id);
+        return new PostResource($cachedPost);
     }
 
     public function store(StorePostRequest $request): PostResource
     {
-        $data = $request->validated();
-        $data['user_id'] = auth()->id();
-
-        $post = $this->postService->createApi($data);
+        $post = $this->action->handle($request->validated(), auth()->id());
 
         return new PostResource($post);
     }
 
-    public function update(UpdatePostRequest $request, int $id): JsonResponse | PostResource
+    public function update(UpdatePostRequest $request, Post $post): JsonResponse | PostResource
     {
-        $post = $this->postService->getByIdApi($id);
-
         Gate::authorize('update', $post);
 
-        $post = $this->postService->updateApi($id, $request->validated());
+        $updatePost = $this->postService->updateApi($post, $request->validated());
 
-        if(!$post){
-            return response()->json(["message" => "Пост не найден"], 404);
-        }
-
-        return new PostResource($post);
+        return new PostResource($updatePost);
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(Post $post): JsonResponse
     {
-        $post = $this->postService->getByIdApi($id);
+        Gate::authorize('delete', $post);
 
-        Gate::authorize('update', $post);
-
-        $deleted = $this->postService->softDeleteApi($id);
-
-        if(!$deleted){
-            return response()->json(["message" => "Пост не найден"], 404);
-        }
+        $this->postService->softDeleteApi($post->id);
 
         return response()->json(['message' => 'Deleted']);
     }
