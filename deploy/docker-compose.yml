@@ -17,6 +17,18 @@ services:
       retries: 10
       start_period: 30s
 
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
   app:
     restart: unless-stopped
     build:
@@ -37,3 +49,4 @@ services:
 
 volumes:
   db_data:
+  redis_data:

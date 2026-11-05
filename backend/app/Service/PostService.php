@@ -7,6 +7,7 @@ use App\Repositories\Interfaces\PostRepositoryInterface;
 use App\Service\Interfaces\PostServiceInterface;
 use Illuminate\Container\Attributes\DB;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -18,11 +19,18 @@ class PostService implements PostServiceInterface
 
     public function getAllApi(): Collection
     {
-        return $this->postRepository->allApi();
+        $posts = Cache::remember('posts_all', 60, function () {
+            return $this->postRepository->allApi()->toArray();
+        });
+
+        return Post::hydrate($posts); //hydrate - метод который обратно возвращает массив из кэша
     }
+
     public function getByIdApi(int $id): ?Post
     {
-        return $this->postRepository->findApi($id);
+        return Cache::remember("posts_{$id}", 60, function () use ($id) {
+            return $this->postRepository->findApi($id);
+        });
     }
 
     public function createApi(array $data): Post
@@ -30,7 +38,15 @@ class PostService implements PostServiceInterface
         $slug = Str::slug($data['title']);
         $data['slug'] = $slug;
 
-        return $this->postRepository->createApi($data);
+        $post = $this->postRepository->createApi($data);
+
+        $id = $post->id;
+
+        Cache::forget('posts_all');
+
+        return Cache::remember("posts_{$id}", 120, function () use ($id) {
+            return $this->postRepository->findApi($id);
+        });
     }
 
     public function updateApi($id, $data): ?Post
@@ -44,7 +60,12 @@ class PostService implements PostServiceInterface
             return null;
         }
 
-        return $this->postRepository->updateApi($post, $data);
+        $updatedPost = $this->postRepository->updateApi($post, $data);
+
+        Cache::forget('posts_all');
+        Cache::forget("posts_{$id}");
+
+        return $updatedPost;
     }
 
     public function deleteApi(int $id): bool
@@ -54,7 +75,11 @@ class PostService implements PostServiceInterface
             return false;
         }
 
-        return $this->postRepository->deleteApi($post);
-    }
+        $deletedPost = $this->postRepository->deleteApi($post);
 
+        Cache::forget('posts_all');
+        Cache::forget("posts_{$id}");
+
+        return $deletedPost;
+    }
 }
