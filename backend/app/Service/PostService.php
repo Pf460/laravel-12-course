@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exceptions\ApiException;
 use App\Models\Post;
 use App\Repositories\Interfaces\PostRepositoryInterface;
 use App\Service\Interfaces\PostServiceInterface;
@@ -43,7 +44,7 @@ class PostService implements PostServiceInterface
         });
 
         if(!$post){
-            return null;
+           throw new ApiException("Post with ID $id not found", 404);
         }
 
         return Post::hydrate([$post])->first();
