@@ -26,11 +26,27 @@ class PostService implements PostServiceInterface
         return Post::hydrate($posts); //hydrate - метод который обратно возвращает массив из кэша
     }
 
+    public function getTrashedApi(): Collection
+    {
+        $posts = Cache::remember('posts_trashed', 60, function () {
+           return $this->postRepository->getTrashed()->toArray();
+        });
+
+        return Post::hydrate($posts);
+    }
+
     public function getByIdApi(int $id): ?Post
     {
-        return Cache::remember("posts_{$id}", 60, function () use ($id) {
-            return $this->postRepository->findApi($id);
+        $post = Cache::remember("posts_{$id}", 60, function () use ($id) {
+            $data = $this->postRepository->findApi($id);
+            return $data ? $data->toArray() : null;
         });
+
+        if(!$post){
+            return null;
+        }
+
+        return Post::hydrate([$post])->first();
     }
 
     public function createApi(array $data): Post
@@ -68,18 +84,45 @@ class PostService implements PostServiceInterface
         return $updatedPost;
     }
 
-    public function deleteApi(int $id): bool
+    public function softDeleteApi(int $id): bool
     {
         $post = $this->postRepository->findApi($id);
         if(!$post) {
             return false;
         }
 
-        $deletedPost = $this->postRepository->deleteApi($post);
+        $deletedPost = $this->postRepository->softDelete($post);
 
         Cache::forget('posts_all');
         Cache::forget("posts_{$id}");
 
         return $deletedPost;
+    }
+
+    public function restoreApi(int $id): ?Post
+    {
+        $post = $this->postRepository->restore($id);
+        if(!$post) {
+            return null;
+        }
+
+        Cache::forget('posts_all');
+        Cache::forget("posts_{$id}");
+
+        return $post;
+    }
+
+    public function forceDeleteApi(int $id): bool
+    {
+        $deleted = $this->postRepository->forceDelete($id);
+
+        if(!$deleted)
+        {
+            return false;
+        }
+
+        Cache::forget('posts_all');
+        Cache::forget("posts_{$id}");
+        return true;
     }
 }
